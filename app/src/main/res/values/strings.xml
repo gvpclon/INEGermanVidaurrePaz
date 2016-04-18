@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">carrito</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_mainlogin">Carrito</string>
+    <string name="usuario">usuario</string>
+    <string name="contraseña">contraseña</string>
+    <string name="ingresar">ingresar</string>
+    <string name="limpiar">limpiar</string>
+    <string name="title_activity_main_administrador">Administrador</string>
+    <string name="title_activity_main_cliente">Cliente</string>
+    <string name="title_activity_main_regusuario">MainRegusuario</string>
+    <string name="title_activity_main_regproducto">Producto</string>
+    <string name="title_activity_main_regcliente">Registro del Cliente</string>
+    <string name="bienvenida">bienvenido:</string>
+    <string name="title_activity_menu_administrador">Menu Administrador</string>
+    <string name="title_activity_menu_cliente">Menu Cliente</string>
+    <string name="regcli">Registro de Cliente</string>
+    <string name="regpro">Registro de Producto</string>
+    <string name="listacli">Lista de Clientes</string>
+    <string name="listaprod">Lista de Productos</string>
+    <string name="selecped">Seleccionar Productos</string>
+    <string name="reppedi">Reporte de Pedido</string>
+    <string name="title_activity_main_pedido">Pedido</string>
+    <string name="title_activity_main_reporte">Reporte</string>
+    <string name="cancelar">CANCELAR</string>
+    <string name="listped">Listado de Pedidos</string>
+</resources>

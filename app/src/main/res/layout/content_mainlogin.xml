@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#ffffff"
+    tools:context="bo.gob.ine.carrito.activity_mainlogin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:foregroundGravity="center_horizontal"
+            android:src="@drawable/carro" />
+
+        <EditText
+            android:id="@+id/txtUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangulo_azul"
+            android:hint="@string/usuario"
+            android:padding="16dp"
+            android:ems="10" >
+            <requestFocus />
+        </EditText>
+
+
+        <EditText
+            android:id="@+id/txtContrasena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rectangulo_azul"
+            android:padding="16dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="@string/contraseña" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp">
+
+            <Button
+                android:id="@+id/btnenviar"
+                android:layout_marginTop="40dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textColor="#ffffff"
+                android:background="#0278c3"
+                android:text="@string/ingresar"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btnlimpiar"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="3dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="#0278c3"
+                android:textColor="#ffffff"
+                android:text="@string/limpiar"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
