@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Set;
 
 public class MainRegcliente extends AppCompatActivity {
     EditText nom,ape,doc,usu,con;
@@ -36,6 +41,8 @@ public class MainRegcliente extends AppCompatActivity {
     private Context context;
     String[] opciones;
     int idmod;
+    TextView tv1;
+
 
 
     @Override
@@ -52,10 +59,33 @@ public class MainRegcliente extends AppCompatActivity {
         usu=(EditText)findViewById(R.id.etusu);
         con=(EditText)findViewById(R.id.etcon);
         tip=(Spinner)findViewById(R.id.sptip);
+        tv1=(TextView)findViewById(R.id.tvtit);
 
         opciones=new String[]{"Seleccionar","Administrador","Cliente"};
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, opciones);
         tip.setAdapter(adaptador);
+
+
+        Bundle bundle = this.getIntent().getExtras();
+        final String valor=bundle.getString("adm");
+        if(valor.equals("1")) {
+            tip.setSelection(Integer.parseInt(bundle.getString("adm")));
+            tip.setVisibility(View.GONE);
+        }
+
+        tip.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (tip.getSelectedItemPosition() != 0) {
+                    SetError(null);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         guardar=(Button)findViewById(R.id.btnguardar);
         modificar=(Button)findViewById(R.id.btnmodificar);
 
@@ -70,13 +100,20 @@ public class MainRegcliente extends AppCompatActivity {
                 usu1 = usu.getText().toString().trim();
                 con1 = con.getText().toString().trim();
 
-                Base_datos base = new Base_datos(context);
-                String[] variables = {"nombres", "apellidos", "nrodocumento", "usuario", "contrasena", "rol"};
-                String[] valores = {nom1, ape1, doc1, usu1, con1, String.valueOf(tipo)};
-                base.insert("cliente",variables,valores);
-                base.close();
-                Toast.makeText(getApplicationContext(), "Registro agregado.", Toast.LENGTH_SHORT).show();
-                reiniciarActividad();
+                if(validar()==0){
+                    Base_datos base = new Base_datos(context);
+                    String[] variables = {"nombres", "apellidos", "nrodocumento", "usuario", "contrasena", "rol"};
+                    String[] valores = {nom1, ape1, doc1, usu1, con1, String.valueOf(tipo)};
+                    base.insert("cliente", variables, valores);
+                    base.close();
+                    Toast.makeText(getApplicationContext(), "Registro agregado.", Toast.LENGTH_SHORT).show();
+                    if(valor.equals("0")){
+                        reiniciarActividad();}
+                    else {
+                        Intent a=new Intent(context,Mainlogin.class);
+                        startActivity(a);
+                    }}
+
             }
         });
         modificar.setOnClickListener(new View.OnClickListener() {
@@ -103,19 +140,33 @@ public class MainRegcliente extends AppCompatActivity {
                 reiniciarActividad();
             }
         });
-
-        agregarFilas("Nombre","Apellidos","Documento","Rol","0");
-        Base_datos base = new Base_datos(context);
-        db=base.getWritableDatabase();
-        Cursor clientes_existentes=db.rawQuery("SELECT * FROM cliente", null);
-        if(clientes_existentes.moveToFirst())
-        {
-            do{
-                agregarFilas(clientes_existentes.getString(1),clientes_existentes.getString(2),clientes_existentes.getString(3),clientes_existentes.getString(6),clientes_existentes.getString(0));
-            }while(clientes_existentes.moveToNext());
-        }
+        if(valor.equals("0")){
+            tv1.setVisibility(View.VISIBLE);
+            agregarFilas("Nombres", "Apellidos", "N° Doc.", "Rol", "0");
+            Base_datos base = new Base_datos(context);
+            db=base.getWritableDatabase();
+            Cursor clientes_existentes=db.rawQuery("SELECT * FROM cliente", null);
+            if(clientes_existentes.moveToFirst())
+            {
+                do{
+                    agregarFilas(clientes_existentes.getString(1),clientes_existentes.getString(2),clientes_existentes.getString(3),clientes_existentes.getString(6),clientes_existentes.getString(0));
+                }while(clientes_existentes.moveToNext());
+            }}
 
     }
+    private int validar(){
+        int valor=0;
+        if(nom1.length()==0){ valor+=1; nom.setError("Ingrese los nombres."); }else{ nom.setError(null);}
+        if(ape1.length()==0){ valor+=1; ape.setError("Ingrese los apellidos."); }else{ ape.setError(null);}
+        if(doc1.length()==0){ valor+=1; doc.setError("Ingrese el nro. de documento."); }else{ doc.setError(null);}
+        if(usu1.length()==0){ valor+=1; usu.setError("Ingrese el usuario."); }else{ usu.setError(null);}
+        if(con1.length()==0){ valor+=1; con.setError("Ingrese la contraseña."); }else{ con.setError(null);}
+        if(tip.getSelectedItemPosition()==0){ valor+=1; SetError("Seleccione el rol."); } else{SetError(null);}
+
+
+        return valor;
+    }
+
 
     private void agregarFilas(String nomb,String apel,String docu, String role, String id)
     {
@@ -130,7 +181,13 @@ public class MainRegcliente extends AppCompatActivity {
         nombreclie.setText(nomb);
         apeclie.setText(apel);
         docclie.setText(docu);
-        rolclie.setText(role);
+        if(role.equals("1")){
+            rolclie.setText("adm");
+        }else{
+            rolclie.setText("cli");
+        }
+
+
 
         if(id.compareTo("0")!=0){
             nombreclie.setBackgroundResource(R.drawable.celda_cuerpo);
@@ -145,11 +202,12 @@ public class MainRegcliente extends AppCompatActivity {
             apeclie.setBackgroundResource(R.drawable.celda_cabecera);
             docclie.setBackgroundResource(R.drawable.celda_cabecera);
             rolclie.setBackgroundResource(R.drawable.celda_cabecera);
+            rolclie.setGravity(Gravity.CENTER);
         }
 
 
         nombreclie.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 5));
-        apeclie.setLayoutParams(new TableRow.LayoutParams(0,TableRow.LayoutParams.MATCH_PARENT, 5));
+        apeclie.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 5));
         docclie.setLayoutParams(new TableRow.LayoutParams(0,TableRow.LayoutParams.MATCH_PARENT, 4));
         rolclie.setLayoutParams(new TableRow.LayoutParams(0,TableRow.LayoutParams.MATCH_PARENT, 4));
 
@@ -223,8 +281,54 @@ public class MainRegcliente extends AppCompatActivity {
         tabla.addView(fila);
     }
     private void reiniciarActividad() {
-        Intent a=new Intent(context,MainRegcliente.class);
+        Intent intent=new Intent(context,MainRegcliente.class);
+        Bundle b = new Bundle();
+        b.putString("adm", "0");
+        intent.putExtras(b);
         finish();
-        startActivity(a);
+        startActivity(intent);
+    }
+    public void SetError(String errorMessage)
+    {
+        View view = tip.getSelectedView();
+        TextView tvListItem = (TextView)view;
+        TextView tvInvisibleError = (TextView)findViewById(R.id.tvInvisibleError);
+        if(errorMessage != null)
+        {
+            tvListItem.setError(errorMessage);
+            tvListItem.requestFocus();
+            //Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+            //tip.startAnimation(shake);
+
+            tvInvisibleError.requestFocus();
+            tvInvisibleError.setError(errorMessage);
+        }
+        else
+        {
+            Bundle bundle = this.getIntent().getExtras();
+            final String valor1=bundle.getString("adm");
+            if(valor1.equals("0")) {
+                tvListItem.setError(null);}
+            tvInvisibleError.setError(null);
+        }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.salir:
+                Intent a= new Intent(context,Mainlogin.class);
+                finish();
+                startActivity(a);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

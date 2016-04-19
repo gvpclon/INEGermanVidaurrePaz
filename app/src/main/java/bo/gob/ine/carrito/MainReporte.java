@@ -12,6 +12,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +33,8 @@ public class MainReporte extends AppCompatActivity {
     TableRow.LayoutParams layoutFila;
     private SQLiteDatabase db;
     private Context context;
+    String email1;
+    TextView fecha,lista;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,28 +46,65 @@ public class MainReporte extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               /* Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                final Dialog dialog = new Dialog(MainReporte.this);
+                dialog.setContentView(R.layout.activity_email);
+                dialog.setTitle("Correo electrónico a enviar listado:");
+                final TextView email=(TextView) dialog.findViewById(R.id.etmail);
+                Button enviar=(Button) dialog.findViewById(R.id.btnenviar);
+                Button cancelar=(Button) dialog.findViewById(R.id.btncancelare);
+                enviar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(email.getText().toString().length() == 0)
+                        { email.setError("Ingrese su correo."); return;} else{email.setError(null);
+                            if(email.getText().toString().matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")){ email.setError("Correo incorrecto."); return; }else{ email.setError(null);}}
+
+                        Intent i = new Intent(Intent.ACTION_SEND);
+                        i.setType("text/plain");
+                        i.putExtra(Intent.EXTRA_EMAIL, new String[]{email.getText().toString()});
+                        i.putExtra(Intent.EXTRA_SUBJECT,"Listado de pedido.");
+                        i.putExtra(Intent.EXTRA_TEXT,"Enviado por android");
+                        startActivity(Intent.createChooser(i, "Seleccione la aplicacion de mail."));
+                    }
+                });
+                cancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+
             }
         });
-
+        fecha=(TextView)findViewById(R.id.tvfecha);
+        lista=(TextView)findViewById(R.id.tvlistado);
         tabla=(TableLayout)findViewById(R.id.tabla);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.WRAP_CONTENT);
         agregarFilas("Producto","Cantidad","Total","0");
         Base_datos base = new Base_datos(context);
+        fecha.setText(fecha());
         db=base.getWritableDatabase();
-        Cursor pedido=db.rawQuery("SELECT pedido.id_producto, producto.producto, pedido.cant_pedido as cantidad, (pedido.cant_pedido * producto.precio) AS total " +
+        Cursor pedido=db.rawQuery("SELECT pedido._id, producto.producto, pedido.cant_pedido as cantidad, (pedido.cant_pedido * producto.precio) AS total " +
                 "FROM producto INNER JOIN pedido ON (producto._id = pedido.id_producto) " +
                 "INNER JOIN cliente ON (pedido.id_cliente = cliente._id) " +
                 "WHERE cliente.usuario = '"+usuario()+"' AND  pedido.fechapedido = '"+fecha()+"' " +
-                "GROUP BY producto.producto,pedido.cant_pedido,producto.precio,pedido.id_producto", null);
+                "GROUP BY producto.producto,pedido.cant_pedido,producto.precio,pedido._id", null);
         if(pedido.moveToFirst())
         {
+            String listado="";
+            int i=0;
             do{
-                agregarFilas(pedido.getString(1),pedido.getString(2),pedido.getString(3),pedido.getString(0));
+                i=1+1;
+                listado=listado+"Producto: "+pedido.getString(1)+"  Cantidad:"+pedido.getString(2)+"  Total:"+ pedido.getString(3)+"\n";
+                agregarFilas(pedido.getString(1), pedido.getString(2), pedido.getString(3), pedido.getString(0));
             }while(pedido.moveToNext());
+            lista.setText(listado);
         }
     }
+
     public String fecha(){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String fechareg = sdf.format(new java.util.Date());
@@ -156,8 +197,9 @@ public class MainReporte extends AppCompatActivity {
                             } else {
                                 etcan.setError(null);
                             }
+                            String[] valores2 = tvped1.getText().toString().split(":");
 
-                            int valores=Integer.parseInt(etcan.getText().toString())+Integer.parseInt(valores1[1].toString().trim());
+                            int valores=Integer.parseInt(etcan.getText().toString())+Integer.parseInt(valores2[1].toString().trim());
                             Base_datos base = new Base_datos(context);
                             ContentValues values = new ContentValues();
                             values.put("cant_pedido", String.valueOf(valores));
@@ -219,6 +261,25 @@ public class MainReporte extends AppCompatActivity {
         Intent a=new Intent(context,MainReporte.class);
         finish();
         startActivity(a);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.salir:
+                Intent a= new Intent(context,Mainlogin.class);
+                finish();
+                startActivity(a);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

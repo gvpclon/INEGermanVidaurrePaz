@@ -166,4 +166,28 @@ public class Base_datos extends SQLiteOpenHelper
         }
         return valor;
     }
+
+    public String cuentaadministrador()
+    {
+        String valor="";
+        SQLiteDatabase database = this.getWritableDatabase();
+        try {
+            Cursor cursor = database.rawQuery("SELECT count(*) as cantidad FROM cliente WHERE cliente.rol = '1'", null);
+            if(cursor.moveToFirst())
+            {
+                valor="1";
+            }else{
+                valor="0";
+            }
+            cursor.close();
+        }
+        catch (SQLiteException e) {
+            if (database.inTransaction())
+                database.endTransaction();
+                valor="0";
+        }
+        return valor;
+    }
+
+
 }

@@ -29,8 +29,12 @@ public class MenuAdministrador extends AppCompatActivity {
         img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent a = new Intent(context,MainRegcliente.class);
-                startActivity(a);
+                Intent intent=new Intent(context,MainRegcliente.class);
+                Bundle b = new Bundle();
+                b.putString("adm", "0");
+                intent.putExtras(b);
+                finish();
+                startActivity(intent);
             }
         });
         img2.setOnClickListener(new View.OnClickListener() {

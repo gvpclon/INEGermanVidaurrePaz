@@ -31,7 +31,8 @@
             android:background="@drawable/rectangulo_azul"
             android:hint="@string/usuario"
             android:padding="16dp"
-            android:ems="10" >
+            android:ems="10"
+            android:maxLength="15">
             <requestFocus />
         </EditText>
 
@@ -42,16 +43,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/rectangulo_azul"
-            android:padding="16dp"
             android:ems="10"
             android:inputType="textPassword"
-            android:hint="@string/contraseña" />
+            android:hint="@string/contraseña"
+            android:maxLength="10"
+            android:padding="16dp" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="30dp">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/btnenviar"
@@ -76,6 +77,16 @@
                 android:text="@string/limpiar"
                 android:layout_weight="1"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvadmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="CREAR USUARIO ADMINISTRADOR"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:textColor="#b71111" />
 
     </LinearLayout>
 

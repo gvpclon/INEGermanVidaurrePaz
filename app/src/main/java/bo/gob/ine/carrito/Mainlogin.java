@@ -20,6 +20,8 @@ public class Mainlogin extends AppCompatActivity {
     public static String idcli=null;
     Button btnen,btnlim;
     EditText tvusu,tvcon;
+    TextView tvadm;
+    private Context context;
 
     private SQLiteDatabase db;
     Base_datos base=new Base_datos(this);
@@ -36,8 +38,21 @@ public class Mainlogin extends AppCompatActivity {
         btnlim=(Button)findViewById(R.id.btnlimpiar);
         tvusu=(EditText)findViewById(R.id.txtUsuario);
         tvcon=(EditText)findViewById(R.id.txtContrasena);
+        tvadm=(TextView)findViewById(R.id.tvadmin);
+        context=this;
+        if(base.cuentaadministrador()=="1"){
+            tvadm.setVisibility(View.INVISIBLE);}
 
-
+        tvadm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context,MainRegcliente.class);
+                Bundle b = new Bundle();
+                b.putString("adm", "1");
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
         btnen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,11 +67,11 @@ public class Mainlogin extends AppCompatActivity {
                 if (usuario.length() == 0) {
                     tvusu.setError("Ingrese su usuario.");
                     return;
-                    }
+                }else{tvusu.setError(null);}
                 if (contrasena.length() == 0) {
                     tvcon.setError("Ingrese su contraseña.");
                     return;
-                }
+                }else{tvcon.setError(null);}
 
                 //verifico la contraseña del usuario en base de datos
                 String[] rescon = base.conseguircontrasena(usuario);
@@ -85,13 +100,11 @@ public class Mainlogin extends AppCompatActivity {
                                         Intent intent = new Intent(Mainlogin.this, MenuAdministrador.class);
                                         tvcon.setText("");
                                         tvusu.setText("");
-                                        finish();
                                         startActivity(intent);
                                     } else {
                                         Intent intent = new Intent(Mainlogin.this, MenuCliente.class);
                                         tvcon.setText("");
                                         tvusu.setText("");
-                                        finish();
                                         startActivity(intent);
                                     }
                                 }else{

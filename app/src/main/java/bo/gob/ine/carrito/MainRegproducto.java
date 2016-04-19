@@ -11,6 +11,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -100,6 +102,14 @@ public class MainRegproducto extends AppCompatActivity {
 
 
     }
+    private int validar(){
+        int valor=0;
+        if(nomp1.length()==0){ valor+=1; nomp.setError("Ingrese el nombre del producto."); }else{ nomp.setError(null);}
+        if(pre1.length()==0){ valor+=1; pre.setError("Ingrese el rpecio."); }else{ pre.setError(null);}
+        if(can1.length()==0){ valor+=1; can.setError("Ingrese la cantidad."); }else{ can.setError(null);}
+        return valor;
+    }
+
     private void reiniciarActividad() {
         Intent a=new Intent(context,MainRegproducto.class);
         finish();
@@ -133,7 +143,7 @@ public class MainRegproducto extends AppCompatActivity {
 
         nombrepro.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 9));
         preciopro.setLayoutParams(new TableRow.LayoutParams(0,TableRow.LayoutParams.MATCH_PARENT, 3));
-        cantidadpro.setLayoutParams(new TableRow.LayoutParams(0,TableRow.LayoutParams.MATCH_PARENT, 3));
+        cantidadpro.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 3));
 
         fila.addView(nombrepro);
         fila.addView(preciopro);
@@ -207,6 +217,24 @@ public class MainRegproducto extends AppCompatActivity {
         modificar.setVisibility(View.VISIBLE);
         idmod=id;
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.salir:
+                Intent a= new Intent(context,Mainlogin.class);
+                finish();
+                startActivity(a);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }

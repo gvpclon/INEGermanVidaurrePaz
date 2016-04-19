@@ -36,6 +36,15 @@
             android:textStyle="bold"
             android:text="fech" />
 
+        <TextView
+            android:id="@+id/tvlistado"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:text="listado"
+            android:visibility="gone" />
+
         <ScrollView
             android:id="@+id/scrollView2"
             android:layout_width="match_parent"
@@ -52,5 +61,6 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </ScrollView>
+
     </LinearLayout>
 </RelativeLayout>

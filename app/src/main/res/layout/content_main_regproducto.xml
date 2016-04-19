@@ -31,7 +31,8 @@
             android:layout_height="wrap_content"
             android:hint="Nombre del producto"
             android:ems="10"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:maxLength="30" />
 
         <EditText
             android:id="@+id/etpre"
@@ -39,7 +40,8 @@
             android:layout_height="wrap_content"
             android:hint="Precio"
             android:ems="10"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:maxLength="5" />
 
         <EditText
             android:id="@+id/etcan"
@@ -47,7 +49,8 @@
             android:layout_height="wrap_content"
             android:hint="Cantidad"
             android:ems="10"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:maxLength="5" />
 
         <Button
             android:id="@+id/btnguardar"
