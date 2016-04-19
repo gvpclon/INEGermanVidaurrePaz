@@ -175,7 +175,10 @@ public class Base_datos extends SQLiteOpenHelper
             Cursor cursor = database.rawQuery("SELECT count(*) as cantidad FROM cliente WHERE cliente.rol = '1'", null);
             if(cursor.moveToFirst())
             {
+                if(cursor.getString(cursor.getColumnIndex("cantidad")).equals("0")){
+                valor="0";}else{
                 valor="1";
+                }
             }else{
                 valor="0";
             }

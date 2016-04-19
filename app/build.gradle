@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "android.curso.adaptadorpersonalizado"
+        applicationId "android.curso.carrito"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1

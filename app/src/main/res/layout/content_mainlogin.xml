@@ -84,9 +84,11 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="CREAR USUARIO ADMINISTRADOR"
-            android:layout_marginTop="10dp"
-            android:visibility="gone"
-            android:textColor="#b71111" />
+            android:layout_marginTop="15dp"
+            android:textColor="#ffffff"
+            android:background="#c91010"
+            android:textStyle="bold"
+            android:padding="10dp" />
 
     </LinearLayout>
 
